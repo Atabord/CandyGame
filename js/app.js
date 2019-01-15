@@ -24,6 +24,15 @@ $(function () {
     // });
   }
 
+  var columns = $('.panel-tablero').children()
+  $.map(columns, col => {
+    for(let i = 0; i < 7; i ++) {
+      var random = Math.floor(Math.random() * 4 + 1);
+      var image = `<img src="./image/${random}.png" class="dulce-${random}" />`
+      col.innerHTML += image;
+    }
+  })
+
   colorWhite();
   initTime();
 })
