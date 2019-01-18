@@ -3,13 +3,13 @@ $(function () {
   function colorWhite() {
     $('.main-titulo').animate({
       color: 'white',
-    }, 1000, colorYellow)
+    }, 500, colorYellow)
   }
 
   function colorYellow() {
     $('.main-titulo').animate({
       color: '#DCFF0E',
-    }, 1000, colorWhite)
+    }, 500, colorWhite)
   }
   
   function initTime() {
@@ -23,16 +23,56 @@ $(function () {
     //     $('#countdownExample .values').html('KABOOM!!');
     // });
   }
+  
+  function initCandies() {
+    var columns = $('.panel-tablero').children()
+    var candies = [];
+    $.map(columns, (col, index) => {
+      candies[index] = [];
+      for(let i = 0; i < 7; i ++) {
+        var random = Math.floor(Math.random() * 4 + 1);
+        candies[index].push(random);
+        var image = `<img src="./image/${random}.png" class="dulce-${random}" />`
+        col.innerHTML += image;
+      }
+    })
+    return candies;
+  }
+  
+  function removeCandies(indexes) {
+    indexes.map((index) => {
+      var col = $(`.col-${index[0] + 1 }`)[0];
+      var row = col.children[index[1]];
+      $(row).hide('pulsate', {}, 2000, () => {
+        $(row).remove()
+      });
+    })
+  }
 
-  var columns = $('.panel-tablero').children()
-  $.map(columns, col => {
-    for(let i = 0; i < 7; i ++) {
-      var random = Math.floor(Math.random() * 4 + 1);
-      var image = `<img src="./image/${random}.png" class="dulce-${random}" />`
-      col.innerHTML += image;
+  function verifyCandies(candies) {
+    var indexes = [];
+    for (var i = 0; i < candies.length; i += 1) {
+      for (var j = 0 ; j < candies[i].length; j += 1) {
+        if (candies[i][j] === candies[i][j + 1] 
+          && candies[i][j] === candies[i][j + 2]) {
+            indexes.push([i,j],[i,j+1],[i,j+2])
+        }
+        if (candies[i+2]) {
+          if (candies[i][j] === candies[i+1][j] 
+            && candies[i][j] === candies[i+2][j]) {
+              indexes.push([i,j],[i+1,j],[i+2,j])
+          }
+        }
+      }
     }
-  })
+    var uniqIndexes = Array.from(new Set(indexes.map(JSON.stringify)), JSON.parse);
+    console.log(uniqIndexes);
+    removeCandies(uniqIndexes);
+  }
+
 
   colorWhite();
   initTime();
+  var candiesAr = initCandies();
+  verifyCandies(candiesAr);
 })
