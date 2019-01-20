@@ -32,12 +32,29 @@ $(function () {
       for(let i = 0; i < 7; i ++) {
         var random = Math.floor(Math.random() * 4 + 1);
         candies[index].push(random);
-        var image = `<img src="./image/${random}.png" class="dulce-${random}" />`
+        var image = getCandy(random);
         col.innerHTML += image;
       }
     })
     return candies;
   }
+
+  function getCandy(number) {
+    var random = number || Math.floor(Math.random() * 4 + 1);
+    var image = `<img src="./image/${random}.png" class="dulce-${random}" />`
+    return image;
+  }
+
+  function verifyDesk() {
+    var desk = $('.panel-tablero')[0].children;
+    $.map(desk, (col, index) => {
+      for(var i = col.childElementCount; i < 7; i ++) {
+        var image = getCandy();
+        $(col).prepend(image);
+      }
+    })
+  }
+
   
   function removeCandies(indexes) {
     indexes.map((index) => {
@@ -45,6 +62,7 @@ $(function () {
       var row = col.children[index[1]];
       $(row).hide('pulsate', {}, 2000, () => {
         $(row).remove()
+        verifyDesk();
       });
     })
   }
