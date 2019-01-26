@@ -51,9 +51,16 @@ $(function () {
       for(var i = col.childElementCount; i < 7; i ++) {
         var image = getCandy();
         $(col).prepend(image);
+        addScore();
       }
     })
     verifyCandies();
+  }
+
+  function addScore() {
+    var score = Number($('#score-text').text());
+    score += 10;
+    $('#score-text').text(score);
   }
 
   
@@ -100,7 +107,8 @@ $(function () {
       }
     }
     var uniqIndexes = Array.from(new Set(indexes.map(JSON.stringify)), JSON.parse);
-    removeCandies(uniqIndexes);
+    (uniqIndexes.length > 0)
+      && removeCandies(uniqIndexes);
   }
 
 
