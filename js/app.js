@@ -19,9 +19,16 @@ $(function () {
     timer.addEventListener('secondsUpdated', function (e) {
         $('#timer').html(timer.getTimeValues().toString().slice(3));
     });
-    // timer.addEventListener('targetAchieved', function (e) {
-    //     $('#countdownExample .values').html('KABOOM!!');
-    // });
+    timer.addEventListener('targetAchieved', function (e) {
+      $('.panel-tablero').hide('fold', {}, 1000, () => {
+        $('.panel-score').animate({
+          width: '100%'
+        }, 500, () => {
+          $('.panel-score').prepend("<p class='titulo-over'>Juego Terminado </p>");
+        });
+      });
+      $('.time').hide('blind', {}, 1000);
+    });
   }
   
   function initCandies() {
@@ -110,10 +117,21 @@ $(function () {
     (uniqIndexes.length > 0)
       && removeCandies(uniqIndexes);
   }
+  var playing = false;
+  
+  function initGame() {
+    playing = true;
+    $('.btn-reinicio').text('Reiniciar');
+    initTime();
+    var candiesAr = initCandies();
+    verifyCandies(candiesAr);
+  }
 
+  $('.btn-reinicio').click(() => {
+    playing 
+      ? location.reload()
+      : initGame();
+  });
 
   colorWhite();
-  initTime();
-  var candiesAr = initCandies();
-  verifyCandies(candiesAr);
 })
