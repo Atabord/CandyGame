@@ -63,9 +63,9 @@ $(function () {
       var row = col.children[index[1]];
       $(row).hide('pulsate', {}, 2000, () => {
         $(row).remove()
-        verifyDesk();
       });
     })
+    setTimeout(() => verifyDesk(), 100);
   }
 
   function getCandiesArray() {
