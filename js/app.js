@@ -53,6 +53,7 @@ $(function () {
         $(col).prepend(image);
       }
     })
+    verifyCandies();
   }
 
   
@@ -67,8 +68,23 @@ $(function () {
     })
   }
 
-  function verifyCandies(candies) {
+  function getCandiesArray() {
+    var cols = $('.panel-tablero').children();
+    var deskArray = [];
+    $.map(cols, (col, index) => {
+      var candies = $(col).find('img');
+      deskArray[index] = []
+      for (var i = 0; i < candies.length; i += 1) {
+        var candy = $(candies[i]).attr('class').slice(-1)
+        deskArray[index].push(Number(candy));
+      }
+    })
+    return deskArray; 
+  }
+
+  function verifyCandies(candiesAr) {
     var indexes = [];
+    var candies = candiesAr || getCandiesArray();
     for (var i = 0; i < candies.length; i += 1) {
       for (var j = 0 ; j < candies[i].length; j += 1) {
         if (candies[i][j] === candies[i][j + 1] 
@@ -84,7 +100,6 @@ $(function () {
       }
     }
     var uniqIndexes = Array.from(new Set(indexes.map(JSON.stringify)), JSON.parse);
-    console.log(uniqIndexes);
     removeCandies(uniqIndexes);
   }
 
